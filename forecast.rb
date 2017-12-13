@@ -23,12 +23,15 @@ class Forecast
   def self.get_forecast(city)
     weather_parsed = {}
 
-
+begin
     uri = URI.parse(cities[city]) #загрузка прогноза погоды для города
 
     responce = Net::HTTP.get_response(uri)
     doc = REXML::Document.new(responce.body)
-
+rescue SocketError => e
+  puts e
+  abort('Не удалось соединиться с сервером, проверьте соединение.')
+end
 
     weather = [] #Создание массивов с прогнозами на сутки
     i = 0
